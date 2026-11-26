@@ -62,7 +62,7 @@ const productos = [
 // ============================================================
 
 function pintarCatalogo(listaProductos) {
-      //Obtenemos el contenedor donde mostraremos los productos
+    //Obtenemos el contenedor donde mostraremos los productos
     const contenedor = document.getElementById("contenedorProductos");
 
     //Limpiamos el contenido anterior
@@ -134,14 +134,49 @@ function mostrarTodosLosProductos() {
 // a pintar el catálogo solo con los resultados.
 // Debe guardar también la búsqueda válida (ver ejercicio 4).
 function buscarProductos() {
-  // TODO
+    //Obtenemos el texto introducido en el buscador
+    let textoBuscado = document.getElementById("inputBusqueda").value.trim();
+
+    //Creamos una expresión regular que no distingue mayúsculas de minúsculas
+    let expresion = new RegExp(textoBuscado, "i");
+
+    //Filtramos los productos cuyo nombre contiene el texto buscado
+    let productosFiltrados = productos.filter(function(producto) {
+        return expresion.test(producto.nombre);
+    });
+
+    //Mostramos los productos encontrados
+    pintarCatalogo(productosFiltrados);
+
+    //Guardamos la búsqueda en el historial
+    guardarBusquedaEnHistorial(textoBuscado);
+
 }
 
 // Valida el contenido de #inputPromo contra el patrón:
 // 3 letras mayúsculas seguidas de 4 dígitos (ej. ABC1234).
 // Muestra el resultado en #mensajePromo.
 function validarCodigoPromocional() {
-  // TODO
+
+    //Obtenemos el código introducido y eliminamos espacios
+    let codigo = document.getElementById("inputPromo").value.trim();
+
+    //Creamos la expresión regular del código promocional
+    let patron = /^[A-Z]{3}\d{4}$/;
+
+    //Obtenemos el elemento donde mostraremos el mensaje
+    let mensaje = document.getElementById("mensajePromo");
+
+    //Comprobamos si el código cumple el formato
+    if (patron.test(codigo)) {
+        mensaje.textContent = "Código válido. Descuento aplicado en el siguiente paso de compra.";
+        mensaje.style.color = "green";
+
+    } else {
+        mensaje.textContent = "Código no válido. Formato esperado: 3 letras mayúsculas + 4 dígitos (ej. ABC1234).";
+        mensaje.style.color = "red";
+
+    }
 }
 
 // ============================================================

@@ -60,9 +60,66 @@ const productos = [
 // (El estado de la oferta, caducada o vigente, se añade en el
 // ejercicio 5 sobre esta misma función.)
 // ============================================================
+
 function pintarCatalogo(listaProductos) {
-  // TODO
+      //Obtenemos el contenedor donde mostraremos los productos
+    const contenedor = document.getElementById("contenedorProductos");
+
+    //Limpiamos el contenido anterior
+    contenedor.innerHTML = "";
+
+    //Recorremos todos los productos del array
+    listaProductos.forEach(function(producto) {
+
+        //1. Convertimos el nombre: primera letra mayúscula y resto minúsculas
+        let nombre = producto.nombre.charAt(0).toUpperCase() +
+                     producto.nombre.slice(1).toLowerCase();
+
+        //2. Calculamos el precio final aplicando el descuento
+        let precioFinal = producto.precio;
+
+        if (producto.descuento > 0) {
+            precioFinal = producto.precio -
+                          (producto.precio * producto.descuento / 100);
+        }
+
+        //Redondeamos el precio a dos decimales
+        precioFinal = Math.round(precioFinal * 100) / 100;
+
+        //3. Comprobamos si la descripción supera los 60 caracteres
+        let descripcion = producto.descripcion;
+
+        if (descripcion.length > 60) {
+            descripcion = descripcion.slice(0, 60) + "...";
+        }
+
+        //4. Mostramos el descuento solamente si existe
+        let etiquetaDescuento = "";
+
+        if (producto.descuento > 0) {
+            etiquetaDescuento = `
+                <span class="descuento">
+                    -${producto.descuento}% dto
+                </span>
+            `;
+        }
+
+        //5. Creamos la tarjeta del producto
+        contenedor.innerHTML += `
+            <div class="tarjeta-producto">
+                <h3>${nombre}</h3>
+                <p>${descripcion}</p>
+                <p class="precio">${precioFinal.toFixed(2)} €</p>
+                ${etiquetaDescuento}
+                <button onclick="anadirAlCarrito(${producto.id})">
+                    Añadir al carrito
+                </button>
+            </div>
+        `;
+
+    });
 }
+
 
 function mostrarTodosLosProductos() {
   pintarCatalogo(productos);
